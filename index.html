@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Authentication</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+        
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            color: red;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .container {
+            position: relative;
+        }
+        .stats {
+            position: absolute;
+            width: 100%;
+            top: -50px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 100px;
+        }
+        .stats div {
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .stats div:first-child {
+            transform: rotate(-15deg);
+            position: absolute;
+            left: -1%;
+            top: -10%;
+        }
+        .stats div:last-child {
+            transform: rotate(15deg);
+            position: absolute;
+            right: 38%;
+            top: -10%;
+        }
+        .title {
+            font-size: 42px;
+            font-weight: bold;
+        }
+        @keyframes shine {
+            0% { background-position: -200px; }
+            100% { background-position: 200px; }
+        }
+        .button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: 2px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            display: inline-block;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%);
+            background-size: 200px;
+            animation: shine 1.5s infinite linear;
+            text-decoration: none;
+        }
+        .background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <canvas class="background"></canvas>
+    <div class="container">
+        <div class="stats">
+            <div>54.7K <br> USERS</div>
+            <div>501.9K <br> BEAMS</div>
+        </div>
+        <div class="title">Draco V2</div>
+        <a href="https://discord.com/oauth2/authorize?client_id=1332198005402767400&redirect_uri=https://is.gd/ieeGNA/callback&response_type=code&scope=identify%20guilds.join&state=randomUniqueString12345" class="button">&#128274; CONTINUE WITH DISCORD</a>
+    </div>
+    
+    <script>
+        const canvas = document.querySelector(".background");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = "red";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p) => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
